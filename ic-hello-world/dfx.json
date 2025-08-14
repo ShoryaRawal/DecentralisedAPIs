@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "canisters": {
+    "hello_world_backend": {
+      "type": "rust",
+      "package": "hello_world_backend",
+      "candid": "hello_world_backend.did"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    },
+    "ic": {
+      "providers": [
+        "https://ic0.app"
+      ],
+      "type": "persistent"
+    }
+  }
+}
