@@ -1,0 +1,70 @@
+type ApiResponse = record {
+  success : bool;
+  data : opt text;
+  error : opt text;
+  timestamp : nat64;
+};
+
+type ApiResponseTask = record {
+  success : bool;
+  data : opt GenerationTask;
+  error : opt text;
+  timestamp : nat64;
+};
+
+type ApiResponseImage = record {
+  success : bool;
+  data : opt vec nat8;
+  error : opt text;
+  timestamp : nat64;
+};
+
+type GenerationRequest = record {
+  prompt : text;
+  negative_prompt : opt text;
+  width : opt nat32;
+  height : opt nat32;
+  num_inference_steps : opt nat32;
+  guidance_scale : opt float32;
+  seed : opt nat64;
+};
+
+type GenerationTask = record {
+  id : text;
+  status : TaskStatus;
+  created_at : nat64;
+  completed_at : opt nat64;
+  request : GenerationRequest;
+  result : opt vec nat8;
+  error : opt text;
+};
+
+type TaskStatus = variant {
+  Pending;
+  Processing;
+  Completed;
+  Failed;
+};
+
+service : {
+  generate_image : (GenerationRequest) -> (ApiResponse);
+  get_task_status : (text) -> (ApiResponseTask) query;
+  get_image : (text) -> (ApiResponseImage) query;
+  list_tasks : () -> (record { success : bool; data : opt vec text; error : opt text; timestamp : nat64 }) query;
+  http_request : (record {
+    url : text;
+    method : text;
+    body : vec nat8;
+    headers : vec record { text; text };
+  }) -> (record {
+    status_code : nat16;
+    headers : vec record { text; text };
+    body : vec nat8;
+    streaming_strategy : opt variant {
+      Callback : record {
+        callback : func () -> () query;
+        token : opt vec nat8;
+      }
+    };
+  }) query;
+}

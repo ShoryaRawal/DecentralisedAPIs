@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "canisters": {
+    "stable_diffusion_ic": {
+      "type": "rust",
+      "package": "ic-stable-diff",
+      "candid": "ic-stable-diff.did"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    }
+  }
+}
